@@ -13,11 +13,12 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
+#      create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 jwt:
   token:
-    secret: tasktracker
+    secret: the-secret-for-harvesting-from-existence-the-greatest-fruitfulness-and-the-greatest-enjoyment-is-to-live-dangerously
     expired: 3600000

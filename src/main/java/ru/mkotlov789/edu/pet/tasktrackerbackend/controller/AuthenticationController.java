@@ -3,11 +3,16 @@ package ru.mkotlov789.edu.pet.tasktrackerbackend.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.AuthenticationResponse;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.LoginRequest;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.RegisterRequest;
+import ru.mkotlov789.edu.pet.tasktrackerbackend.exception.UserExistsException;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.service.AuthenticationService;
 
 @Slf4j
@@ -19,17 +24,23 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
-        log.info("start registr");
-        authService.registerUser(registerRequest);
-        return ResponseEntity.ok("User is registered");
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
+        try {
+            String jwtToken = authService.registerUser(registerRequest.getUsername(),registerRequest.getPassword());
+            return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
+        } catch (UserExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @PostMapping("/login")
-    ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        log.info("start login");
-        authService.authenticateUser(loginRequest);
-        return  ResponseEntity.ok("LoginPage");
+    ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            String jwtToken = authService.authenticateUser(loginRequest.getUsername(),loginRequest.getPassword());
+            return  ResponseEntity.ok(new AuthenticationResponse(jwtToken));
+        } catch (AuthenticationException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

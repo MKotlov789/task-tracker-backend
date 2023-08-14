@@ -78,10 +78,11 @@ public class JwtService {
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 
         return Jwts.builder()//
-                .setClaims(claims)//
+                .setClaims(claims)
+                .setSubject(username)//
                 .setIssuedAt(now)//
                 .setExpiration(validity)//
-                .signWith(SignatureAlgorithm.HS256, secret)//
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
     private List<String> getRoleNames(List<Role> userRoles) {

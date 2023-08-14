@@ -2,15 +2,12 @@ package ru.mkotlov789.edu.pet.tasktrackerbackend.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.LoginRequest;
-import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.LoginResponse;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.RegisterRequest;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.exception.UserExistsException;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.model.Role;
@@ -32,34 +29,31 @@ public class AuthenticationService {
 
 
 
-    public void registerUser(RegisterRequest registerRequest) throws UserExistsException{
+    public String registerUser(String username, String password) throws UserExistsException{
 
-        if (userRepository.existsUserByUsername(registerRequest.getUsername())) {
+        if (userRepository.existsUserByUsername(username)) {
             throw new UserExistsException();
         }
         User user = new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setUsername(username);
+        user.setPassword(passwordEncoder.encode(password));
         user.setRole(Role.USER);
         userRepository.save(user);
+        return authenticateUser(username, password);
     }
 
-    public LoginResponse authenticateUser(LoginRequest loginRequest) {
-        Authentication auth = new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername(),
-                loginRequest.getPassword()
+    public String authenticateUser(String username, String password) throws AuthenticationException {
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                username,
+                password
         );
-        log.info("authenth is created");
-        Authentication authentication = authenticationManager.authenticate(
-           auth
-        );
-        log.info("authenticated");
-        User user = userRepository.findByUsername(loginRequest.getUsername())
-                .get();
+
+        authenticationManager.authenticate(authentication);
+        User user = userRepository.findByUsername(username).get();
         List<Role> roleList = new ArrayList<>();
         roleList.add(user.getRole());
         String jwtToken = jwtService.createToken(user.getUsername(),roleList);
-        return new LoginResponse(jwtToken);
+        return jwtToken;
 
     }
 }
