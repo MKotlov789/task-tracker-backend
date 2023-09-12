@@ -24,9 +24,6 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
 
-
-
-
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
