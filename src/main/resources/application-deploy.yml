@@ -4,7 +4,7 @@ server:
 
 spring:
   kafka:
-    bootstrap-servers: localhost:29092
+    bootstrap-servers: kafka:9092
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -19,7 +19,7 @@ spring:
     cache: false
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/task_manager_db
+    url: jdbc:mysql://db:3306/task_manager_db
     username: root
     password: root
   jpa:
@@ -35,6 +35,11 @@ jwt:
     secret: the-secret-for-harvesting-from-existence-the-greatest-fruitfulness-and-the-greatest-enjoyment-is-to-live-dangerously
     expired: 36000000
 topic: test
+
+
+config:
+  activate:
+    on-profile: deploy
 #logging:
 #  level:
 #    org:

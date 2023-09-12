@@ -38,6 +38,8 @@ public class JwtService {
 
 
     public boolean validateToken(String jwtToken) {
+
+
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(jwtToken);
 
@@ -46,7 +48,7 @@ public class JwtService {
             }
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            return false;
         }
     }
 
@@ -59,11 +61,11 @@ public class JwtService {
     }
 
 
-    public Authentication authenticate(String validJwtToken) {
+    public UsernamePasswordAuthenticationToken authenticate(String validJwtToken) {
         UserDetails user = userRepository.findByUsername(usernameFromToken(validJwtToken)).get();
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 user,
-                "",
+                null,
                 user.getAuthorities());
         return authenticationToken;
     }

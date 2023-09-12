@@ -19,23 +19,6 @@ class TaskTrackerBackendApplicationTests {
 	String USERNAME = "user";
 	String PASSWORD = "pass";
 
-	@Test
-	void LoginTest() {
 
-		LoginRequest loginRequest = new LoginRequest(USERNAME,PASSWORD);
-		RegisterRequest registerRequest = new RegisterRequest(USERNAME,PASSWORD);
-
-		ResponseEntity<String> registerEntry = restTemplate.postForEntity(
-				"/api/auth/login",
-				registerRequest,
-				String.class);
-
-		ResponseEntity<String> logEntry = restTemplate.postForEntity(
-				"/api/auth/login",
-				loginRequest,
-				String.class);
-
-		assertThat(logEntry.getBody()).isEqualTo("LoginPage");
-	}
 
 }

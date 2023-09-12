@@ -47,7 +47,7 @@ public class AuthenticationService {
                 username,
                 password
         );
-
+        log.info("authenticating");
         authenticationManager.authenticate(authentication);
         User user = userRepository.findByUsername(username).get();
         List<Role> roleList = new ArrayList<>();

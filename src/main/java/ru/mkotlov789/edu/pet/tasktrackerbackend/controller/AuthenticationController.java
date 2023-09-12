@@ -14,6 +14,7 @@ import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.LoginRequest;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.RegisterRequest;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.exception.UserExistsException;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.service.AuthenticationService;
+import ru.mkotlov789.edu.pet.tasktrackerbackend.service.EmailService;
 
 @Slf4j
 @RestController
@@ -21,12 +22,14 @@ import ru.mkotlov789.edu.pet.tasktrackerbackend.service.AuthenticationService;
 @RequestMapping("/api/auth")
 public class AuthenticationController {
     private final AuthenticationService authService;
+    private final EmailService emailService;
 
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
         try {
             String jwtToken = authService.registerUser(registerRequest.getUsername(),registerRequest.getPassword());
+            emailService.sendWelcomeEmail(registerRequest.getUsername());
             return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
         } catch (UserExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
