@@ -1,6 +1,7 @@
 package ru.mkotlov789.edu.pet.tasktrackerbackend.controller;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.AuthenticationResponse;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.LoginRequest;
@@ -26,10 +28,12 @@ public class AuthenticationController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
         try {
-            String jwtToken = authService.registerUser(registerRequest.getUsername(),registerRequest.getPassword());
-            emailService.sendWelcomeEmail(registerRequest.getUsername());
+            String jwtToken = authService.registerUser(registerRequest.getUsername(),
+                    registerRequest.getPassword(),
+                    registerRequest.getEmail());
+            emailService.sendWelcomeEmail(registerRequest.getEmail());
             return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
         } catch (UserExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -37,7 +41,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
+    ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         try {
             String jwtToken = authService.authenticateUser(loginRequest.getUsername(),loginRequest.getPassword());
             return  ResponseEntity.ok(new AuthenticationResponse(jwtToken));
