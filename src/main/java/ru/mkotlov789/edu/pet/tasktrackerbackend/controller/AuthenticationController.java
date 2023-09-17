@@ -33,7 +33,7 @@ public class AuthenticationController {
             String jwtToken = authService.registerUser(registerRequest.getUsername(),
                     registerRequest.getPassword(),
                     registerRequest.getEmail());
-            emailService.sendWelcomeEmail(registerRequest.getEmail());
+            emailService.sendWelcomeEmail(registerRequest.getEmail(), registerRequest.getUsername());
             return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
         } catch (UserExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

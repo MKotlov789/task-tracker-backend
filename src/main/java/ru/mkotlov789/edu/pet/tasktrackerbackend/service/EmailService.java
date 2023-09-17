@@ -18,11 +18,11 @@ public class EmailService {
     private final KafkaTemplate<String , Object> kafkaTemplate;
 
 
-    public void sendWelcomeEmail(String emailAdress) {
+    public void sendWelcomeEmail(String emailAddress, String username) {
         EmailDto emailDto = new EmailDto();
-        emailDto.setEmailAdress(emailAdress);
+        emailDto.setEmailAdress(emailAddress);
         emailDto.setSubject("Welcome!");
-        emailDto.setBody("Welcome,"+emailAdress+"!");
+        emailDto.setBody("Welcome,"+username+"!");
         kafkaTemplate.send(topic,emailDto.getEmailAdress(),emailDto);
 
 
