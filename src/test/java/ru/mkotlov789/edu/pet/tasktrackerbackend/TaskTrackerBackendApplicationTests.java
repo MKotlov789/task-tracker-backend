@@ -16,7 +16,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TaskTrackerBackendApplicationTests {
 	@Autowired
 	TestRestTemplate restTemplate;
-	String USERNAME = "user";
+	String USERNAME = "user1";
+	
 	String PASSWORD = "pass";
 
 
