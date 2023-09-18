@@ -25,6 +25,5 @@ public class EmailService {
         emailDto.setBody("Welcome,"+username+"!");
         kafkaTemplate.send(topic,emailDto.getEmailAdress(),emailDto);
 
-
     }
 }

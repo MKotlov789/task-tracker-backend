@@ -29,14 +29,23 @@ public class AuthenticationService {
 
 
 
-
+    /**
+     * Registers a new user with the provided username, password, and email address.
+     *
+     * @param username The username of the new user.
+     * @param password The password of the new user.
+     * @param email    The email address of the new user.
+     * @return A JWT token representing the authenticated user.
+     * @throws UserExistsException If a user with the same username or email already exists.
+     */
     public String registerUser(String username,
                                String password,
                                String email) throws UserExistsException{
 
-        if (userRepository.existsUserByUsername(username) ||
-            userRepository.existsUserByEmail(email)) {
-            throw new UserExistsException();
+        if (userRepository.existsUserByUsername(username)) {
+            throw new UserExistsException("User with this username exists");
+        } else if (userRepository.existsUserByEmail(email)) {
+            throw new UserExistsException("User with this email exists");
         }
         User user = new User();
         user.setUsername(username);
@@ -45,27 +54,33 @@ public class AuthenticationService {
         user.setRole(Role.USER);
         userRepository.save(user);
         log.info("User "+ username + " is registered");
-        return authenticateUser(username, password);
+        String jwtToken = jwtService.createToken(user.getUsername(),List.of(Role.USER));
+        return jwtToken;
     }
 
-    public String authenticateUser(String username, String password) throws AuthenticationException {
+    /**
+     * Authenticates a user with the provided username or email and password.
+     *
+     * @param identifier The username or email of the user to authenticate.
+     * @param password   The password of the user to authenticate.
+     * @return A JWT token representing the authenticated user.
+     * @throws AuthenticationException If authentication fails.
+     */
+    public String authenticateUser(String identifier, String password) throws AuthenticationException {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(
-                username,
+                identifier,
                 password
         );
         log.info("authenticating");
         authenticationManager.authenticate(authentication);
-        Optional<User> userOptional = userRepository.findByUsername(username);
+        Optional<User> userOptional = userRepository.findByUsername(identifier);
 
         if (userOptional.isEmpty()) {
-            //If the user is not found by username, we se
-            userOptional = userRepository.findByEmail(username);
+            userOptional = userRepository.findByEmail(identifier);
         }
         User user = userOptional.get();
-        List<Role> roleList = new ArrayList<>();
-        roleList.add(user.getRole());
-        String jwtToken = jwtService.createToken(user.getUsername(),roleList);
+        String jwtToken = jwtService.createToken(user.getUsername(),List.of(user.getRole()));
         return jwtToken;
 
     }
