@@ -21,7 +21,13 @@ import ru.mkotlov789.edu.pet.tasktrackerbackend.service.TaskService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+/**
+ * Controller class for managing tasks.
+ *
+ * Authentication is enforced via the use of the `@AuthenticationPrincipal` annotation, which ensures that
+ * each endpoint is accessible only to authenticated users, and the authenticated user's identity is available
+ * for performing user-specific operations.
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor

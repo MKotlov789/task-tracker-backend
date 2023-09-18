@@ -2,11 +2,14 @@ package ru.mkotlov789.edu.pet.tasktrackerbackend.annotation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+/**
+ * Custom username validator class that implements the ConstraintValidator interface for username validation.
+ *
+ * This validator checks whether a given username string conforms to a specific pattern for username format.
+ */
 public class UsernameValidator
         implements ConstraintValidator<ValidUsername, String> {
 

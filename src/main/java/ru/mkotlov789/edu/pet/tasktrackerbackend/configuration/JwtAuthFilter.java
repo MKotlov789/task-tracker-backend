@@ -18,6 +18,14 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.service.JwtService;
 
 import java.io.IOException;
+/**
+ * JwtAuthFilter is a Spring Security filter responsible for authenticating requests
+ * using JSON Web Tokens (JWT). It intercepts incoming HTTP requests and checks for
+ * the presence of a valid JWT in the request headers.
+ *
+ * If a valid JWT is found, it is used to authenticate the user by setting the
+ * user's security context, allowing access to secured API endpoints.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor

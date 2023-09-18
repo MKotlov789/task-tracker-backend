@@ -6,7 +6,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+/**
+ * Custom email validator class that implements the ConstraintValidator interface for email validation.
+ *
+ * This validator checks whether a given email string conforms to a standard email pattern.
+ *
+ * @see ValidEmail
+ */
 public class EmailValidator
         implements ConstraintValidator<ValidEmail, String> {
 
