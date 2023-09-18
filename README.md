@@ -7,9 +7,7 @@ Welcome to the Task Tracker Backend repository! This repository contains the bac
 - [Overview](#overview)
 - [Project Structure](#project-structure)
 - [API Endpoints](#api-endpoints)
-- [Authentication](#authentication)
-- [Validation](#validation)
-- [Sending Welcome Emails](#sending-welcome-emails)
+
 
 ## Overview
 
