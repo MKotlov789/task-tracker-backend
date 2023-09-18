@@ -2,12 +2,16 @@ package ru.mkotlov789.edu.pet.tasktrackerbackend.service;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.EmailDto;
 
+import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -23,7 +27,15 @@ public class EmailService {
         emailDto.setEmailAdress(emailAddress);
         emailDto.setSubject("Welcome!");
         emailDto.setBody("Welcome,"+username+"!");
-        kafkaTemplate.send(topic,emailDto.getEmailAdress(),emailDto);
+        CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topic,emailDto.getEmailAdress(),emailDto);
+        future.whenComplete((result, ex) -> {
+            if (ex == null) {
+                log.info("Email message sent to Kafka topic '{}' for '{}'", topic, emailAddress);
+            }
+            else {
+                log.error("Error sending email message to Kafka topic '{}' for '{}': {}", topic, emailAddress, ex.getMessage());
+            }
+        });
 
     }
 }
