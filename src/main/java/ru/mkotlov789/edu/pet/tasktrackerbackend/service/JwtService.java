@@ -25,12 +25,21 @@ import java.util.List;
 public class JwtService {
     private final UserRepository userRepository;
 
+    /**
+     * The secret key used for JWT token signing.
+     */
     @Value("${jwt.token.secret}")
     private String secret;
 
+    /**
+     * The validity duration of JWT tokens in milliseconds.
+     */
     @Value("${jwt.token.expired}")
     private long validityInMilliseconds;
 
+    /**
+     * Initializes the secret key by encoding it with Base64 during the bean's post-construction phase.
+     */
     @PostConstruct
     protected void init() {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
@@ -38,7 +47,6 @@ public class JwtService {
 
 
     public boolean validateToken(String jwtToken) {
-
 
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(jwtToken);
@@ -52,8 +60,8 @@ public class JwtService {
         }
     }
 
-    public String getTokenFromRequest(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
+    public String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
         }

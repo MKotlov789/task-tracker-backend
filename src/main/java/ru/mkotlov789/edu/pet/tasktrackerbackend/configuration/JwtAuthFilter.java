@@ -29,7 +29,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        log.info("authentication using jwt is started");
+
 
         String token = jwtService.getTokenFromRequest(request);
         if(token != null && jwtService.validateToken(token) ) {

@@ -9,7 +9,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties:
-        acks: 1
+        acks: 0
         spring:
           json:
             add:

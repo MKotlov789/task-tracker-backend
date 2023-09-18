@@ -10,7 +10,10 @@ import org.springframework.stereotype.Service;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.EmailDto;
 
 import java.util.concurrent.CompletableFuture;
-
+/**
+ * EmailService is a service class responsible for sending welcome email notifications using Kafka messaging.
+ * It sends a welcome email with the provided email address and username to the specified Kafka topic.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,7 +24,12 @@ public class EmailService {
 
     private final KafkaTemplate<String , Object> kafkaTemplate;
 
-
+    /**
+     * Sends a welcome email notification to the specified email address with the provided username.
+     *
+     * @param emailAddress The recipient's email address.
+     * @param username     The username for the welcome message.
+     */
     public void sendWelcomeEmail(String emailAddress, String username) {
         EmailDto emailDto = new EmailDto();
         emailDto.setEmailAdress(emailAddress);

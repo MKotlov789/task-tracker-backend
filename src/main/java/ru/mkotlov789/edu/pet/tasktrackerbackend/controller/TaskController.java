@@ -2,12 +2,15 @@ package ru.mkotlov789.edu.pet.tasktrackerbackend.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.errors.AuthorizationException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.TaskDto;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.exception.NotFoundException;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.exception.TaskCompletedException;
@@ -52,28 +55,36 @@ public class TaskController {
     public ResponseEntity<String> updateTask(@PathVariable Long taskId,
                                               @RequestBody TaskDto taskDto,
                                               @AuthenticationPrincipal User user) {
-        log.info("update is started");
-        Task task = taskDtoToTask(taskDto);
+        Task taskUpdate = taskDtoToTask(taskDto);
         try {
-            taskService.updateTask(task, user, taskId);
-            return ResponseEntity.ok("task is updated");
+            taskService.updateTask(taskUpdate, user, taskId);
+            return ResponseEntity.ok("task with id '{}' is updated"+taskId);
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (TaskCompletedException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
-
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<>
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<String> deleteTask(@PathVariable Long taskId, @AuthenticationPrincipal User user) {
+        try {
+            taskService.deleteTask(taskId, user);
+            return ResponseEntity.ok("task with id '{}' is removed"+taskId);
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (AuthorizationException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
 
     @PostMapping("/")
     public ResponseEntity<String> createTask(@RequestBody TaskDto taskDto,
                                              @AuthenticationPrincipal User user) {
         Task task = taskDtoToTask( taskDto);
         taskService.saveTask(task, user);
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok("new task is created");
     }
 
     private TaskDto taskToTaskDto(Task task) {
