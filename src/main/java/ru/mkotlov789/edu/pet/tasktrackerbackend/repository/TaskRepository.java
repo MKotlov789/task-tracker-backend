@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface TaskRepository extends JpaRepository<Task,Long> {
 
     List<Task> findByUserId(Long userId);
+    void deleteByUser(User user);
 
 }

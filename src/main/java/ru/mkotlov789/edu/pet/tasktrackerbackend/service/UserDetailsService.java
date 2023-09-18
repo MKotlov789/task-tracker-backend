@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.model.User;
+import ru.mkotlov789.edu.pet.tasktrackerbackend.repository.TaskRepository;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.repository.UserRepository;
 
 
@@ -13,6 +14,7 @@ import ru.mkotlov789.edu.pet.tasktrackerbackend.repository.UserRepository;
 @Service
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
     private UserRepository userRepository;
+    private TaskRepository taskRepository;
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
         if (isEmailAddress(usernameOrEmail)) {
@@ -25,8 +27,8 @@ public class UserDetailsService implements org.springframework.security.core.use
 
 
     }
-    public void deleteUserByUsername(String username) throws UsernameNotFoundException {
-        User user = (User) loadUserByUsername( username);
+    public void deleteUser(User user) {
+        taskRepository.deleteByUser(user);
         userRepository.delete(user);
     }
 
