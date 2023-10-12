@@ -1,4 +1,4 @@
-package ru.mkotlov789.edu.pet.tasktrackerbackend.service;
+package ru.mkotlov789.edu.pet.tasktrackerbackend.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;

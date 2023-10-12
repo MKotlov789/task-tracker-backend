@@ -7,16 +7,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.TaskDto;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.exception.NotFoundException;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.exception.TaskCompletedException;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.model.Task;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.model.User;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.service.TaskService;
+import ru.mkotlov789.edu.pet.tasktrackerbackend.service.impl.TaskServiceImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;

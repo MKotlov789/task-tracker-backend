@@ -5,11 +5,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.annotation.ValidEmail;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.annotation.ValidPassword;
@@ -19,6 +16,7 @@ import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.LoginRequest;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.dto.RegisterRequest;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.exception.UserExistsException;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.service.AuthenticationService;
+import ru.mkotlov789.edu.pet.tasktrackerbackend.service.impl.AuthenticationServiceImpl;
 import ru.mkotlov789.edu.pet.tasktrackerbackend.service.EmailService;
 /**
  * Controller handling user registration and login.
