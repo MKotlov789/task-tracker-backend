@@ -9,6 +9,6 @@ import java.util.List;
 public interface JwtService {
     boolean validateToken(String jwtToken);
     String getTokenFromRequest(HttpServletRequest request);
-    public UsernamePasswordAuthenticationToken authenticate(String validJwtToken);
-    public String createToken(String username, List<Role> roles);
+    UsernamePasswordAuthenticationToken authenticate(String validJwtToken);
+    String createToken(String username, List<Role> roles);
 }
