@@ -15,7 +15,9 @@
 	<description></description>
 	<properties>
 		<java.version>17</java.version>
+		<skipTests>true</skipTests>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -125,9 +127,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<properties>
-    		<skipTests>true</skipTests>
-	</properties>
 
 </project>
